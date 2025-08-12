@@ -1,0 +1,38 @@
+---
+import SEO from "../components/SEO.astro";
+import ShareBar from "../components/ShareBar.astro";
+import cfg from "../config.m2m.json";
+const { frontmatter } = Astro.props;
+const { title, description, image, pubDate, updatedDate, category } = frontmatter;
+const schema = {"@context":"https://schema.org","@type":"BlogPosting","headline":title,"datePublished":pubDate,"dateModified":updatedDate||pubDate,"image":image||"/favicon.ico","author":{"@type":"Person","name":"Alicia Walker"},"mainEntityOfPage":{"@type":"WebPage","@id":cfg.siteUrl}};
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
+    <SEO title={title} description={description} image={image} url={cfg.siteUrl} schema={schema} />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <header class="max-w-5xl mx-auto px-4 py-6 flex items-center gap-4">
+      <img src="/logo.png" alt="Mad2Moi" class="h-10 w-auto" />
+      <a href="/blog" class="text-white text-xl font-semibold">Mad2Moi — Blog</a>
+      <nav class="ml-auto flex gap-4 text-white/80">
+        <a href="/blog/categorie/libertinage">Libertinage</a>
+        <a href="/blog/categorie/lgbt">LGBT+</a>
+        <a href="/blog/categorie/sex-shop">Sex‑shop</a>
+        <a href="/blog/rss.xml">RSS</a>
+      </nav>
+    </header>
+    <main class="max-w-3xl mx-auto px-4">
+      <article class="prose prose-invert max-w-none">
+        <h1>{title}</h1>
+        <p class="text-sm text-white/70">Publie le <time datetime={pubDate}>{pubDate}</time>{updatedDate && <> · Mis a jour le <time datetime={updatedDate}>{updatedDate}</time></>} · Alicia Walker {category && <> · <a href={`/blog/categorie/${category.toLowerCase()}`}>{category}</a></>}</p>
+        {image && <img src={image} alt={description} class={cfg.blurAdultImages ? 'rounded-xl mt-4 blur-[2px] hover:blur-0 transition' : 'rounded-xl mt-4'} loading="lazy" />}
+        <slot />
+        <ShareBar title={title} />
+      </article>
+    </main>
+    <footer class="max-w-5xl mx-auto px-4 py-10 text-white/60">© {new Date().getFullYear()} Mad2Moi — <a href="https://www.mad2moi.com">mad2moi.com</a></footer>
+  </body>
+</html>

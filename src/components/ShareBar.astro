@@ -1,0 +1,18 @@
+---
+const { title } = Astro.props;
+const url = `https://www.mad2moi.com${Astro.url.pathname}`;
+const text = encodeURIComponent(title);
+const shareLinks = [
+  { name:'X', href:`https://twitter.com/intent/tweet?url=${url}&text=${text}` },
+  { name:'Facebook', href:`https://www.facebook.com/sharer/sharer.php?u=${url}` },
+  { name:'WhatsApp', href:`https://api.whatsapp.com/send?text=${text}%20${url}` },
+  { name:'Telegram', href:`https://t.me/share/url?url=${url}&text=${text}` },
+  { name:'Pinterest', href:`https://pinterest.com/pin/create/button/?url=${url}&description=${text}` },
+  { name:'LinkedIn', href:`https://www.linkedin.com/sharing/share-offsite/?url=${url}` },
+];
+---
+<div class="flex flex-wrap gap-3 mt-6">
+  {shareLinks.map(s => (
+    <a class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20" href={s.href} target="_blank" rel="noopener">{s.name}</a>
+  ))}
+</div>

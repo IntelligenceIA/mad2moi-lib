@@ -1,0 +1,17 @@
+---
+export interface Props { title:string; description?:string; image?:string; url?:string; type?:string; noindex?:boolean; schema?:any; }
+const { title, description = '', image = '/favicon.ico', url = '', type='article', noindex=false, schema } = Astro.props;
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex,nofollow" />}
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{image && <meta property="og:image" content={image} />}
+{url && <meta property="og:url" content={url} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{image && <meta name="twitter:image" content={image} />}
+{schema && <script type="application/ld+json">{JSON.stringify(schema)}</script>}

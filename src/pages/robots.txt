@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.mad2moi.com/blog/sitemap.xml
