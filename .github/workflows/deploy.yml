@@ -1,3 +1,4 @@
+@'
 name: Deploy Astro Blog to Contabo
 
 on:
@@ -33,3 +34,8 @@ jobs:
           remote_host: 62.84.191.34
           remote_user: root
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+'@ | Set-Content .github\workflows\deploy.yml
+
+git add .github\workflows\deploy.yml
+git commit -m "Fix: complete rsync deploy workflow"
+git push
