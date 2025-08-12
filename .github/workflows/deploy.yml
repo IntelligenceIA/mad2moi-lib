@@ -1,28 +1,40 @@
+name: Deploy Astro Blog to Contabo
 
-name: Deploy Mad2Moi Blog
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      # 1) Récupérer le code
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      # 2) Node.js 20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
+
+      # 3) Installer les dépendances
       - name: Install dependencies
         run: npm ci
-      - name: Build site
+
+      # 4) Build Astro
+      - name: Build Astro site
         run: npm run build
-      - name: Deploy to Contabo
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no root@62.84.191.34 "mkdir -p /var/www/mad2moi/blog"
-          rsync -avz --delete dist/ root@62.84.191.34:/var/www/mad2moi/blog/
+
+      # 5) Déployer uniquement /dist via rsync
+      - name: Deploy via rsync
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avz --delete
+          path: dist/
+          remote_path: /var/www/mad2moi/blog/
+          remote_host: 62.84.191.34
+          remote_user: root
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
